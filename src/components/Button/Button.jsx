@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import styles from "./Button.css";
 
-export default class Button extends React.Component {
-  render() {
-    const { text, backgroundColor, modalHandler, dataID } = this.props;
-    console.log(dataID);
+ function Button({ text, backgroundColor, modalHandler, dataID } ) {
+
     return (
       <div>
         <button
@@ -16,5 +14,6 @@ export default class Button extends React.Component {
         </button>
       </div>
     );
-  }
+  
 }
+export default Button;

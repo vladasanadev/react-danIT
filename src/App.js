@@ -1,94 +1,95 @@
-import React, { Component, useEffect } from "react";
+import React, { Component, useEffect, useState } from "react";
 import Button from "./components/Button/Button.jsx";
 import Modal from "./components/Modal/Modal.jsx";
+import Header from "./components/Header/Header.jsx";
 import data from "../src/common-files/data.json";
 import products from "./products.json";
 import CardList from "./components/CardList/CardList.jsx";
 import Card from "./components/Card/Card.jsx";
+import Cart from "./components/Cart/Cart.jsx";
 import img from "./img/products/1.jpg";
+import { NavLink, Route, Switch } from "react-router-dom";
+import AppRoutes from "./routes/AppRoutes.jsx";
 
-class App extends React.Component {
-  state = {
-    show: false,
-    modalInfo: {},
-    productData: [],
-  };
+function App(props) {
+  const [modalInfo, setModalInfo] = useState({});
+  const [productData, setProductData] = useState([]);
+  const [show, setShow] = useState(false);
+  const [favourites, setFavourites] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [isFavourite, setisFavourite] = useState(false);
 
-  componentDidMount() {
-    this.setState({ productData: products });
-    console.log(this.state.productData);
-  }
+  
+  const favouriteItemsList = [];
 
-  updateModal = (id) => {
+  useEffect(() => {
+    setProductData(products);
+    // this.setState({ productData: products });
+    console.log(productData);
+  }, [])
+
+  const updateModal = (id) => {
     const modalInfo = data.modalDAta.filter((modal) => modal.id === id);
-    console.log(modalInfo);
-    this.setState({
-      show: !this.state.show,
-      modalInfo: modalInfo,
-    });
-    console.log(this.state);
+    setShow(!show);
+    setModalInfo(modalInfo);
+    // this.setState({
+    //   show: !this.state.show,
+    //   modalInfo: modalInfo,
+    // });
   };
-  showModal = () => {
-    this.setState({
-      show: !this.state.show,
-    });
+  const showModal = () => {
+    setShow(!show);
   };
 
-  render() {
-    console.log(data);
-    const dataID = {
-      buttonOne: 1,
-      buttonTwo: 2,
-    };
-    return (
-      <div className="App">
-        <CardList
-          productInfo={products}
-          handler={() => {
-            this.updateModal(dataID.buttonOne);
-          }}
-        />
+   
+  
+  //creatin dataID for modals
+  const dataID = {
+    buttonOne: 1,
+    buttonTwo: 2,
+  };
+  return (
+    <div className="App">
+   <Header/>
+      <AppRoutes items={products}
+      
+        isFavourite={isFavourite}
+        setisFavourite={setisFavourite}
+        productInfo={products}
+        favouriteItem={favourites}
+        favourites={favourites}
+        setFavourites={setFavourites}
+        cartItems={cartItems}
+        setCartItems={setCartItems}
+        setFavourites={setFavourites}
+        handler={() => {
+          updateModal(dataID.buttonOne);
+        }}
+      />
 
-        {this.state.show && (
-          <Modal
-            show={this.state.show}
-            header={this.state.modalInfo[0].header}
-            text={this.state.modalInfo[0].text}
-            handler={this.showModal}
-            actions={[
-              <Button
-                text={"YES"}
-                backgroundColor={"#b53726"}
-                modalHandler={this.showModal}
-              />,
-              <Button text={"NO"} backgroundColor={"#b53726"} />,
-            ]}
-          />
-        )}
-        <Button
-          text={"Open first modal"}
-          backgroundColor={"grey"}
-          dataID={dataID.buttonOne}
-          // modalText={
-          //   "Once you delete this file it won't be possible to restore it.Do you wanna delete this file"
-          // }
-          modalHandler={() => this.updateModal(dataID.buttonOne)}
+      {show && (
+        <Modal
+          show={show}
+          header={modalInfo[0].header}
+          text={modalInfo[0].text}
+          handler={showModal}
+          actions={[
+            <Button
+              text={"YES"}
+              backgroundColor={"#b53726"}
+              modalHandler={showModal}
+            />,
+            <Button text={"NO"} backgroundColor={"#b53726"} />,
+          ]}
         />
-        <Button
-          dataID={dataID.buttonTwo}
-          text={"Open second modal"}
-          backgroundColor={"pink"}
-          // modalText={"Second modal window"}
-          // header={"Are you sure you wanna close?"}
-          modalHandler={() => {
-            this.updateModal(dataID.buttonTwo);
-          }}
-        />
-      </div>
-    );
-  }
+      )}
+    
+    </div>
+  );
+  
+}
+  // useEffect(()=>{
 
-  // componentDidMount() {
   //   fetch(data, {
   //     headers: {
   //       "Content-Type": "application/json",
@@ -100,6 +101,8 @@ class App extends React.Component {
   //   this.setState({ productData: res });
   // });
   // }
-}
+
+  // }, []) 
+
 
 export default App;

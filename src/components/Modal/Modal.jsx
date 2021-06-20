@@ -2,25 +2,22 @@ import React, { Component } from "react";
 import styles from "./Modal.css";
 import Button from "../Button/Button";
 
-export default class Modal extends Component {
-  render() {
-    console.log(this.props);
-
+export default function Modal({handler, header,text,actions}){
     return (
-      <div onClick={this.props.handler} className="modal" id="simpleModal">
+      <div onClick={handler} className="modal" id="simpleModal">
         <div className="modal-content">
           <div className="modal-header">
-            <span className="closeBtn" onClick={this.props.handler}>
+            <span className="closeBtn" onClick={handler}>
               &times;
             </span>
-            <h2>{this.props.header}</h2>
+            <h2>{header}</h2>
           </div>
           <div className="modal-body">
-            <p>{this.props.text}</p>
+            <p>{text}</p>
           </div>
-          <div className="modal-footer">{this.props.actions}</div>
+          <div className="modal-footer">{actions}</div>
         </div>
       </div>
     );
-  }
+  
 }
